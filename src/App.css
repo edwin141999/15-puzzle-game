@@ -1,3 +1,7 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+
 .puzzle {
     margin: 0 auto;
     display: grid;
@@ -8,7 +12,7 @@
 }
 
 .tile {
-    /* border: 1px solid white; */
+    border: 1px solid white;
     min-width: 100px;
     min-height: 100px;
     display: flex;
@@ -16,5 +20,5 @@
     align-items: center;
     font-size: 50px;
     cursor: pointer;
-    /* background-color: #eb6b6b; */
+    color: #FFCDA4;
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 
 function App() {
@@ -6,23 +6,39 @@ function App() {
     () => Math.random() - 0.5
   );
 
-  const ORDER_WINNER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ""];
+  const ORDER_WINNER = useMemo(
+    () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ""],
+    []
+  );
 
-  const [number, setNumber] = useState(NUMBERS);
+  const [number, setNumber] = useState(() => {
+    const number = JSON.parse(localStorage.getItem("number"));
+    console.log(number);
+    return number ? number : NUMBERS;
+  });
+
+  const [count, setCount] = useState(() => {
+    const count = JSON.parse(localStorage.getItem("count"));
+    console.log(count);
+    return count ? count : 0;
+  });
 
   useEffect(() => {
     for (let index = 0; index < number.length; index++) {
       if (number[index] === ORDER_WINNER[index]) {
         const id = document.getElementById(index);
-        id.classList.remove("bg-red-500");
-        id.classList.add("bg-green-500");
-      }else{
+        id.classList.remove("bg-red-700");
+        id.classList.add("bg-green-700");
+      } else {
         const id = document.getElementById(index);
-        id.classList.remove("bg-green-500");
-        id.classList.add("bg-red-500");
+        id.classList.remove("bg-green-700");
+        id.classList.add("bg-red-700");
       }
     }
-  }, [number, ORDER_WINNER,NUMBERS]);
+
+    const isWin = number.toString() === ORDER_WINNER.toString();
+    isWin && alert("You Win!");
+  }, [number, ORDER_WINNER]);
 
   const moveTile = (index) => {
     const tile = number[index];
@@ -43,17 +59,38 @@ function App() {
       newNumbers[tileIndex] = "";
       newNumbers[emptyIndex] = tile;
       setNumber(newNumbers);
+      const newCount = count + 1;
+      setCount(newCount);
+      window.localStorage.setItem("number", JSON.stringify(newNumbers));
+      window.localStorage.setItem("count", JSON.stringify(newCount));
     }
 
-    if (NUMBERS === ORDER_WINNER) {
-      alert("You win!");
+    const id = document.getElementById(index);
+    id.classList.add("transition");
+    id.classList.add("duration-500");
+    id.classList.add("ease-in-out");
+    id.classList.add("transform");
+
+    if (NUMBERS.toString() === ORDER_WINNER.toString()) {
+      alert("You Win!");
     }
   };
 
+  const resetGame = () => {
+    setNumber(NUMBERS);
+    setCount(0);
+  };
+
   return (
-    <div className="h-screen bg-slate-500 text-white">
-      <h1 className="flex justify-center text-2xl py-5">15-Puzzle Game</h1>
-      <div className="puzzle">
+    <div className="h-full min-h-screen bg-slate-700 text-white flex flex-col justify-center items-center">
+      <h1 className="flex justify-center text-2xl py-2">15-Puzzle Game</h1>
+      <button
+        className="bg-red-900 border p-3 my-2 text-lg"
+        onClick={() => resetGame()}
+      >
+        RESET GAME
+      </button>
+      <div className="puzzle mt-2">
         {number.map((cell, index) => (
           <div
             key={index}
@@ -64,6 +101,9 @@ function App() {
             {cell}
           </div>
         ))}
+      </div>
+      <div className="flex flex-col text-xl items-center py-10">
+        <p>Numero de movimientos: {count}</p>
       </div>
     </div>
   );
