@@ -22,3 +22,14 @@
     cursor: pointer;
     color: #FFCDA4;
 }
+
+@media screen and (max-width: 500px) {
+    .puzzle {
+        max-width: 300px;
+    }
+    .tile {
+        min-width: 75px;
+        min-height: 75px;
+        font-size: 30px;
+    }
+}

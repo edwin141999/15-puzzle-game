@@ -82,7 +82,7 @@ function App() {
   };
 
   return (
-    <div className="h-full min-h-screen bg-slate-700 text-white flex flex-col justify-center items-center">
+    <div className="min-h-screen bg-slate-700 text-white flex flex-col justify-center items-center">
       <h1 className="flex justify-center text-2xl py-2">15-Puzzle Game</h1>
       <button
         className="bg-red-900 border p-3 my-2 text-lg"
